@@ -5,7 +5,8 @@ import jakarta.validation.constraints.Positive;
 import lombok.Getter;
 import lombok.Setter;
 
-@Entity(name = "product")
+@Entity
+@Table(name = "product")
 @Setter
 @Getter
 public class ProductEntity {

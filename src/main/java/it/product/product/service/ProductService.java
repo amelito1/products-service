@@ -1,5 +1,6 @@
 package it.product.product.service;
 
+import it.euris.common.PageUtils;
 import it.product.product.dto.request.OrderedProductRequest;
 import it.product.product.dto.request.ProductRequest;
 import it.product.product.dto.response.ProductResponse;
@@ -8,6 +9,9 @@ import it.product.product.repository.ProductRepository;
 import it.product.product.utility.ProductUtility;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -59,7 +63,17 @@ public class ProductService {
                 .stream()
                 .map(ProductUtility::mapProductToResponse)
                 .toList();
+    }
 
+    public Page<ProductResponse> retrievesProductPages(int page, int size) {
+
+        Pageable pageable = PageRequest.of(page, size);
+
+        final List<ProductResponse> customers = this.productRepository
+                .findAll(pageable)
+                .stream()
+                .map(ProductUtility::mapProductToResponse).toList();
+        return PageUtils.toPage(customers, pageable);
     }
 
     private void  checkIfProductExists(List<Long> productIds, List<ProductEntity> products) {

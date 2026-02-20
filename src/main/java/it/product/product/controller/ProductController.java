@@ -7,6 +7,7 @@ import it.product.product.dto.response.ProductResponse;
 import it.product.product.service.ProductService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -53,6 +54,14 @@ public class ProductController {
     ) {
         final List<ProductResponse> products = this.productService.OrderedProductByIds(orderedProductRequests);
         return ResponseEntity.ok(products);
+    }
+
+    @GetMapping(path = "/retrieve-orders-pages", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Page<ProductResponse>> retrieveProductsPages(@RequestParam int page,
+                                                                   @RequestParam int size) {
+        final Page<ProductResponse> productPages = this.productService.retrievesProductPages(page, size);
+
+        return ResponseEntity.ok(productPages);
     }
 
 

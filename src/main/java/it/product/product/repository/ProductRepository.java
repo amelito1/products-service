@@ -5,13 +5,15 @@ import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.ListCrudRepository;
+import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
 @Repository
-public interface ProductRepository extends ListCrudRepository<ProductEntity,Long > {
+public interface ProductRepository extends ListCrudRepository<ProductEntity,Long>,
+        PagingAndSortingRepository<ProductEntity, Long> {
 
     List<ProductEntity> findByIdIn(List<Long> ids);
 
