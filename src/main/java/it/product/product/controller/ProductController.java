@@ -48,13 +48,7 @@ public class ProductController {
         return ResponseEntity.ok(products);
     }
 
-    @PostMapping(path = "/retrieve-ordered-products-by-id", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<ProductResponse>> retrievesOrderedProductsById(
-            @RequestBody List<Long>  orderedProductRequests
-    ) {
-        final List<ProductResponse> products = this.productService.OrderedProductByIds(orderedProductRequests);
-        return ResponseEntity.ok(products);
-    }
+
 
     @GetMapping(path = "/retrieve-orders-pages", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Page<ProductResponse>> retrieveProductsPages(@RequestParam int page,
@@ -62,6 +56,15 @@ public class ProductController {
         final Page<ProductResponse> productPages = this.productService.retrievesProductPages(page, size);
 
         return ResponseEntity.ok(productPages);
+    }
+
+    @PostMapping(path = "/update-canceled-product-order", produces = MediaType.APPLICATION_JSON_VALUE)
+    ResponseEntity<List<Integer>>updateOrderedCancelProducts(
+            @RequestBody List<OrderedProductRequest>  orderedProductRequests
+    ){
+
+       final List<Integer> updatedValues = this.productService.updateCanceledProductOrder(orderedProductRequests);
+        return ResponseEntity.ok(updatedValues);
     }
 
 

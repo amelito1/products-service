@@ -7,14 +7,15 @@ import it.product.product.dto.response.ProductResponse;
 import it.product.product.entities.ProductEntity;
 import it.product.product.repository.ProductRepository;
 import it.product.product.utility.ProductUtility;
-import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.IntStream;
 
 @Service
 public class ProductService {
@@ -52,17 +53,21 @@ public class ProductService {
 
         this.reduceStocks(products);
 
-        return productEntity.stream().map(ProductUtility::mapProductToResponse).toList() ;
+        List<ProductEntity> productEntityWithOrderedQuantities= IntStream
+                .range(0, products.size()).mapToObj(i -> {
+            final ProductEntity product = productEntity.get(i);
+            final OrderedProductRequest orderedProductRequest = products.get(i);
+            product.setStock(orderedProductRequest.getProductQuantity());
+            return product;
+        } ).toList();
+
+        return productEntityWithOrderedQuantities.stream().map(ProductUtility::mapProductToResponse).toList() ;
 
     }
 
-    public List<ProductResponse> OrderedProductByIds(List<Long> productIds) {
+    public List<Integer> updateCanceledProductOrder(List<OrderedProductRequest> orderedProductRequests) {
 
-        return this.productRepository
-                .findByIdIn(productIds)
-                .stream()
-                .map(ProductUtility::mapProductToResponse)
-                .toList();
+      return  this.increaseStocks(orderedProductRequests);
     }
 
     public Page<ProductResponse> retrievesProductPages(int page, int size) {
@@ -76,6 +81,8 @@ public class ProductService {
         return PageUtils.toPage(customers, pageable);
     }
 
+
+
     private void  checkIfProductExists(List<Long> productIds, List<ProductEntity> products) {
         if (productIds.isEmpty() || productIds.size() != productIds.size() ) {
 
@@ -84,18 +91,32 @@ public class ProductService {
     }
 
 
-    public void reduceStocks(List<OrderedProductRequest> products) {
+    private void reduceStocks(List<OrderedProductRequest> products) {
 
         for (OrderedProductRequest  product: products) {
             int updated = productRepository.decreaseStock(
                     product.getProductId(),
                     product.getProductQuantity()
             );
-
             if (updated == 0) {
                 throw new RuntimeException("Insufficient stock");
             }
         }
+    }
+
+    private List<Integer> increaseStocks(List<OrderedProductRequest> products) {
+
+        List<Integer> updatedValue = new ArrayList<>(products.size());
+
+        for (OrderedProductRequest  product: products) {
+            int updated = productRepository.decreaseStock(
+                    product.getProductId(),
+                    product.getProductQuantity()
+            );
+            updatedValue.add(updated);
+        }
+
+        return updatedValue;
     }
 
 

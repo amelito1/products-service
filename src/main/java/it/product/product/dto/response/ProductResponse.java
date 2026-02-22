@@ -2,10 +2,12 @@ package it.product.product.dto.response;
 
 import jakarta.validation.constraints.NotNull;
 
+import java.math.BigDecimal;
+
 public record ProductResponse(
         @NotNull long id,
         @NotNull String productName,
         @NotNull Long stock,
-        @NotNull Double unitPrice
+        @NotNull BigDecimal unitPrice
 ) {
 }

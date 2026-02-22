@@ -27,4 +27,15 @@ public interface ProductRepository extends ListCrudRepository<ProductEntity,Long
     """)
     int decreaseStock(@Param("id") Long id,
                       @Param("qty") Long qty);
+
+    @Transactional
+    @Modifying
+    @Query("""
+        UPDATE product p
+        SET p.stock = p.stock + :qty
+        WHERE p.id = :id
+        AND p.stock >= :qty
+    """)
+    int increaseStock(@Param("id") Long id,
+                      @Param("qty") Long qty);
 }

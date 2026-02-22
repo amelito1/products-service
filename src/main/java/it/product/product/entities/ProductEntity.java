@@ -5,7 +5,9 @@ import jakarta.validation.constraints.Positive;
 import lombok.Getter;
 import lombok.Setter;
 
-@Entity
+import java.math.BigDecimal;
+
+@Entity(name = "product")
 @Table(name = "product")
 @Setter
 @Getter
@@ -18,7 +20,7 @@ public class ProductEntity {
     @Column(name = "product_name")
     private String productName;
 
-    private Double unitPrice;
+    private BigDecimal unitPrice;
 
     @Positive
     private Long stock;

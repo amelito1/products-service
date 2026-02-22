@@ -4,6 +4,8 @@ import it.product.product.dto.request.ProductRequest;
 import it.product.product.dto.response.ProductResponse;
 import it.product.product.entities.ProductEntity;
 
+import java.math.BigDecimal;
+
 public class ProductUtility {
 
     static public  ProductEntity mapProductToEntity(ProductRequest productRequest) {
@@ -13,7 +15,7 @@ public class ProductUtility {
         product.setProductName(productRequest.getProductName());
 
         product.setStock(productRequest.getStock());
-        product.setUnitPrice(productRequest.getPrice());
+        product.setUnitPrice(BigDecimal.valueOf(productRequest.getPrice()));
 
         return product;
     }
