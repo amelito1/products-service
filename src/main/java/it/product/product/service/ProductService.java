@@ -109,7 +109,7 @@ public class ProductService {
         List<Integer> updatedValue = new ArrayList<>(products.size());
 
         for (OrderedProductRequest  product: products) {
-            int updated = productRepository.decreaseStock(
+            int updated = productRepository.increaseStock(
                     product.getProductId(),
                     product.getProductQuantity()
             );

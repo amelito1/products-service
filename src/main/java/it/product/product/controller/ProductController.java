@@ -59,7 +59,7 @@ public class ProductController {
     }
 
     @PostMapping(path = "/update-canceled-product-order", produces = MediaType.APPLICATION_JSON_VALUE)
-    ResponseEntity<List<Integer>>updateOrderedCancelProducts(
+    ResponseEntity<List<Integer>> updateOrderedCancelProducts(
             @RequestBody List<OrderedProductRequest>  orderedProductRequests
     ){
 
