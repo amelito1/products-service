@@ -45,7 +45,10 @@ public class ProductService {
 
     public List<ProductResponse> findOrderedProductByIds(List<OrderedProductRequest> products) {
 
-        final List<Long> productIds = products.stream().map(OrderedProductRequest::getProductId).toList();
+        final List<Long> productIds = products
+                .stream()
+                .map(OrderedProductRequest::getProductId)
+                .toList();
 
         final List<ProductEntity> productEntity = this.productRepository.findByIdIn(productIds);
 
@@ -61,7 +64,10 @@ public class ProductService {
             return product;
         } ).toList();
 
-        return productEntityWithOrderedQuantities.stream().map(ProductUtility::mapProductToResponse).toList() ;
+        return productEntityWithOrderedQuantities
+                .stream()
+                .map(ProductUtility::mapProductToResponse)
+                .toList() ;
 
     }
 
@@ -84,7 +90,7 @@ public class ProductService {
 
 
     private void  checkIfProductExists(List<Long> productIds, List<ProductEntity> products) {
-        if (productIds.isEmpty() || productIds.size() != productIds.size() ) {
+        if (productIds.isEmpty() || productIds.size() != products.size() ) {
 
             throw new RuntimeException("Some products do not exist");
         }
